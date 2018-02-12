@@ -11,11 +11,14 @@ class ImageGetter:
         raw_list (list) -- Its items contain the individual lines from the original text file.
         matching_string (str) -- Regular expression string used to match links that contain characters for a valid URL.
         filtered_list (list) -- Contains the items from raw_list that are valid URLs.
+        test_mode (boolean) -- If True, it indicates that test mode is active and logging is suppressed. Otherwise, a
+            logging instance is created to contain information about URL validity and the success of image downloads.
     """
 
     raw_list = []
     matching_string = ''
     filtered_list = []
+    test_mode = False
 
     def __init__(self, **kwargs):
         """Initialises raw_list, matching string, and generates a logging instance.

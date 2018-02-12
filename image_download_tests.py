@@ -4,7 +4,7 @@ import image_download
 
 class ImageGetterTests(unittest.TestCase):
     def setUp(self):
-        # We create an instance with the given source file and log file name
+        # We create an instance with the given source file and specify that test mode is on
         self.images = image_download.ImageGetter(source_file_name='test_links.txt', test_mode= True)
 
     def test_init(self):
