@@ -22,9 +22,10 @@ class ImageGetterTests(unittest.TestCase):
         # The expected raw_list after reading in test_links.txt. The first 2 items are invalid: two URLS in 1 line,
             # and a URL containing unsafe characters
         expected_raw_list = ['http://mywebserver.com/  http://mages/271947.jpg',
-                             'http://mywebserver.%^{~/images/271947.com', 'http://mywebserver.com/images/271947.jpg',
-                             'http://somewebsrv.com/img/992147.jpg',
-                             'https://www.blue-yonder.com/sites/default/files/styles/mood_full/public/rgc04_home_page_1.png?itok=MFcd1qVa']
+                             'http://mywebserver.%^{~/images/271947.com', 'http://somewebsrv.com/img/992147.jpg',
+                             'https://www.blue-yonder.com/de',
+                             'https://www.blue-yonder.com/sites/default/files/styles/mood_full/public/rgc04_home_page_1.png?itok=MFcd1qVa',
+                             'https://media.wired.com/photos/5a7b558800beae0e1d91a5d0/master/w_799,c_limit/03_olympic-village_pyeongchang_31dec2017_wv3.jpg']
 
         self.assertEqual(self.images.raw_list, expected_raw_list)
 
@@ -40,8 +41,9 @@ class ImageGetterTests(unittest.TestCase):
             self.assertIsInstance(item, str)
 
         # Expected list after filtering the raw_list above
-        expected_filtered_list = ['http://mywebserver.com/images/271947.jpg', 'http://somewebsrv.com/img/992147.jpg',
-                                  'https://www.blue-yonder.com/sites/default/files/styles/mood_full/public/rgc04_home_page_1.png?itok=MFcd1qVa']
+        expected_filtered_list = ['http://somewebsrv.com/img/992147.jpg', 'https://www.blue-yonder.com/de',
+                                  'https://www.blue-yonder.com/sites/default/files/styles/mood_full/public/rgc04_home_page_1.png?itok=MFcd1qVa',
+                                  'https://media.wired.com/photos/5a7b558800beae0e1d91a5d0/master/w_799,c_limit/03_olympic-village_pyeongchang_31dec2017_wv3.jpg']
 
         self.assertEqual(self.images.filtered_list, expected_filtered_list)
 
