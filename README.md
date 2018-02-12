@@ -1,6 +1,6 @@
 # Image-downloader
 Python (3.x) script for downloading images from URLs contained in a source text file. Upon execution (except in test mode), a log file is created where information about the invalid URLs, as well as about failed attempts to download an image is collected.
-Also, an example source file is added, containing valid and broken links.
+Also, an example source file (test_links.txt) is added, containing valid and broken links.
 A unit test script tests the methods and functionalities of the original code.
 
 Instructions for *image_download.py*:
