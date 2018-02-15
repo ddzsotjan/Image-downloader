@@ -98,8 +98,8 @@ class ImageGetter:
                 return "noimage"
 
     def get_images(self):
-        """Method for looping through filtered_list and downloading the images its items point to, using download_link().
-        For each item, it checks the returned value of get_one_image(), and logs it into the log file if the download
+        """Method for looping through filtered_list and downloading the images its items point to, using .get_one_image().
+        For each item, it checks the returned value of .get_one_image(), and logs it into the log file if the download
         was unsuccessful.
         """
 
