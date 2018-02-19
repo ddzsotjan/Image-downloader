@@ -89,7 +89,7 @@ class ImageGetter:
     def get_images(self):
         """Method for looping through raw_list and downloading the images its items point to, using get_one_image().
         For each item, it tries to call get_one_image(), and (depending on the exception raised) logs it into the
-         log file if there was a problem with the URL format (pointing out the line in the original source file), if the URL
+         log file if there was a problem with the URL (pointing out the line in the original source file), if the URL
           was unreachable, or if the content type of the URL was not an image.
         """
 
@@ -100,11 +100,11 @@ class ImageGetter:
             try:
                 self.get_one_image(link, image_index)
             except ValueError:
-                logging.warning("Line {} in source file broken or not a valid URL format.".format(line_index + 1))
+                logging.warning("Line {}: broken or unsafe URL format.".format(line_index + 1))
             except urllib.request.URLError:
-                logging.warning("{} - URL error.".format(link))
+                logging.warning("Line {}: {} -- URL error.".format(line_index + 1, link))
             except TypeError:
-                logging.warning(link + " does not point to an image.")
+                logging.warning("Line {}: {} does not point to an image.".format(line_index + 1, link))
             else:
                 image_index += 1
 
