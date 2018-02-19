@@ -4,6 +4,6 @@ Also, an example source file (**test_links.txt**) is added, containing valid and
 A unit test script (**image_download_tests.py**) tests the methods and functionalities of the original code.
 
 Instructions for using **image_download.py**:
-  - create an ImageGetter() instance specifying the source text file
-  - call the .get_images() method to download the images the URLs point at
+  - Create an ImageGetter() instance specifying the source text file
+  - Call the .get_images() method to download the images the URLs point at
   - You're done! :)
