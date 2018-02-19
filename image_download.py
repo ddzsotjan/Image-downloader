@@ -70,14 +70,14 @@ class ImageGetter:
 
         if not match:
             return "invalidURL"
+        
         else:
-
             try:
                 content = urllib.request.urlopen(link)
             except urllib.request.URLError:
                 return 'URLError'
+            
             else:
-
                 content_type = content.info().get_content_type()
                 if 'image' in content_type:
                     image_extension = re.search(r"(\w+)$", content_type).group()
@@ -85,6 +85,7 @@ class ImageGetter:
                     image = urllib.request.urlretrieve(link, 'image_' + str(image_index) + '.' + image_extension)
 
                     return image[0]
+                
                 else:
                     return "noImage"
 
