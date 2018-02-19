@@ -37,7 +37,6 @@ class ImageGetter:
         if not self.test_mode:
             log_file_name = kwargs.get('log_file_name', 'image_getter.log')
             log_level = kwargs.get('log_level', logging.DEBUG)
-
             logging.basicConfig(filename=log_file_name, level=log_level)
 
     def construct_raw_list(self, file_name):
