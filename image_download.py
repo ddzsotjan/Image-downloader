@@ -89,7 +89,7 @@ class ImageGetter:
     def get_images(self):
         """Method for looping through raw_list and downloading the images its items point to, using get_one_image().
         For each item, it tries to call get_one_image(), and (depending on the exception raised) logs it into the
-         log file if there was a problem with the URL (pointing out the line in the original source file), if the URL
+         log file if there was a problem with the URL format (pointing out the line in the original source file), if the URL
           was unreachable, or if the content type of the URL was not an image.
         """
 
