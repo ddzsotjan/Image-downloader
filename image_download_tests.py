@@ -31,13 +31,17 @@ class ImageGetterTests(unittest.TestCase):
 
     def test_get_one_image(self):
 
+        # Broken/unsafe URL:
+        download_feedback0 = self.images.get_one_image('http://mywebserver.%^{~/images/271947.com', 1)
+        self.assertEqual(download_feedback0, 'invalidURL')
+
         # Unreachable URL:
         download_feedback1 = self.images.get_one_image('http://somewebsrv.com/img/992147.jpg', 1)
         self.assertEqual(download_feedback1, 'URLError')
 
         # Reachable URL but doesn't point to image
         download_feedback2 = self.images.get_one_image('https://www.blue-yonder.com/de', 1)
-        self.assertEqual(download_feedback2, 'noimage')
+        self.assertEqual(download_feedback2, 'noImage')
 
         # Image successfully downloaded
         download_feedback3 = self.images.get_one_image('https://www.blue-yonder.com/sites/default/files/styles/mood_full/public/rgc04_home_page_1.png?itok=MFcd1qVa', 1)
