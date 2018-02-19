@@ -5,7 +5,7 @@ import image_download
 class ImageGetterTests(unittest.TestCase):
     def setUp(self):
         # We create an instance with the given source file and specify that test mode is on
-        self.images = image_download.ImageGetter(source_file_name='test_links.txt', test_mode= True)
+        self.images = image_download.ImageGetter(source_file_name='test_links.txt', test_mode=True)
 
     def test_init(self):
         # The regular expression used to select valid URLs should be a string
@@ -28,24 +28,6 @@ class ImageGetterTests(unittest.TestCase):
                              'https://media.wired.com/photos/5a7b558800beae0e1d91a5d0/master/w_799,c_limit/03_olympic-village_pyeongchang_31dec2017_wv3.jpg']
 
         self.assertEqual(self.images.raw_list, expected_raw_list)
-
-    def test_filter_links(self):
-
-        # List construction
-        self.images.filter_links()
-
-        self.assertIsInstance(self.images.filtered_list, list)
-
-        # Items of the list are strings
-        for item in self.images.filtered_list:
-            self.assertIsInstance(item, str)
-
-        # Expected list after filtering the raw_list above
-        expected_filtered_list = ['http://somewebsrv.com/img/992147.jpg', 'https://www.blue-yonder.com/de',
-                                  'https://www.blue-yonder.com/sites/default/files/styles/mood_full/public/rgc04_home_page_1.png?itok=MFcd1qVa',
-                                  'https://media.wired.com/photos/5a7b558800beae0e1d91a5d0/master/w_799,c_limit/03_olympic-village_pyeongchang_31dec2017_wv3.jpg']
-
-        self.assertEqual(self.images.filtered_list, expected_filtered_list)
 
     def test_get_one_image(self):
 

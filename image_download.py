@@ -10,14 +10,12 @@ class ImageGetter:
     Attributes:
         raw_list (list) -- Its items contain the individual lines from the original text file.
         matching_string (str) -- Regular expression string used to match links that contain characters for a valid URL.
-        filtered_list (list) -- Contains the items from raw_list that are valid URLs.
         test_mode (boolean) -- If True, it indicates that test mode is active and logging is suppressed. Otherwise, a
             logging instance is created to contain information about URL validity and the success of image downloads.
     """
 
     raw_list = []
     matching_string = ''
-    filtered_list = []
     test_mode = False
 
     def __init__(self, **kwargs):
@@ -55,24 +53,11 @@ class ImageGetter:
         source_file.close()
         self.raw_list = list(map(lambda item: item.strip('\s'), source.split('\n')))
 
-    def filter_links(self):
-        """Method for choosing the valid URLs from raw_list. It uses matching_string to decide,
-        and puts the valid links into filtered_list. It also logs the presence of invalid links into the log file.
-        """
-
-        for line in range(0, len(self.raw_list)):
-            match = re.match(self.matching_string, self.raw_list[line])
-            if match:
-                self.filtered_list.append(match.group())
-            elif not self.test_mode:
-                logging.warning("Line {} in source file broken or not a valid URL format.".format(line + 1))
-
-        if not self.test_mode:
-            logging.info("------------- Links filtered -------------\n")
-
     def get_one_image(self, link, image_index):
         """Method for downloading an image belonging to a single URL.
-        It checks if the URL is reachable. If not reachable, it returns 'URLError'.
+        It checks if the URL is in a valid format and if it contains unsafe characters. If there is a problem,
+        it returns "invalid URL".
+        If the URL is all right, it checks if the URL is reachable. If not reachable, it returns 'URLError'.
         Else, it checks whether the content of the URL is an image. If it's an image, it downloads it, and returns
         the file name under which it has been saved on the hard disk.
         if it isn't an image, then it returns 'noimage'.
@@ -81,39 +66,51 @@ class ImageGetter:
             link (str) -- the URL we want to download.
             image_index (str) -- the running index to construct the file name upon saving: 'image_<image_index>.ext'
         """
+        match = re.match(self.matching_string, link)
 
-        try:
-            content = urllib.request.urlopen(link)
-        except urllib.request.URLError:
-            return 'URLError'
+        if not match:
+            return "invalid URL"
         else:
-            content_type = content.info().get_content_type()
-            if 'image' in content_type:
-                image_extension = re.search(r"(\w+)$", content_type).group()
 
-                image = urllib.request.urlretrieve(link, 'image_' + str(image_index) + '.' + image_extension)
-
-                return image[0]
+            try:
+                content = urllib.request.urlopen(link)
+            except urllib.request.URLError:
+                return 'URLError'
             else:
-                return "noimage"
+
+                content_type = content.info().get_content_type()
+                if 'image' in content_type:
+                    image_extension = re.search(r"(\w+)$", content_type).group()
+
+                    image = urllib.request.urlretrieve(link, 'image_' + str(image_index) + '.' + image_extension)
+
+                    return image[0]
+                else:
+                    return "noimage"
 
     def get_images(self):
-        """Method for looping through filtered_list and downloading the images its items point to, using .get_one_image().
-        For each item, it checks the returned value of .get_one_image(), and logs it into the log file if the download
+        """Method for looping through raw_list and downloading the images its items point to, using download_link().
+        For each item, it checks the returned value of get_one_image(), and logs it into the log file if there was a
+         problem with the URL (pointing out the line in the original source file) as well as if the download
         was unsuccessful.
         """
 
         image_index = 0
-        for link in self.filtered_list:
+        line_index = 0
+        for link in self.raw_list:
 
             download_feedback = self.get_one_image(link, image_index)
 
-            if download_feedback == 'URLError' and not self.test_mode:
+            if download_feedback == 'invalid URL' and not self.test_mode:
+                logging.warning("Line {} in source file broken or not a valid URL format.".format(line_index + 1))
+            elif download_feedback == 'URLError' and not self.test_mode:
                 logging.warning("{} - URL error.".format(link))
             elif download_feedback == 'noimage' and not self.test_mode:
                 logging.warning(link + " does not point to an image.")
             else:
                 image_index += 1
+
+            line_index += 1
 
         if not self.test_mode:
             logging.info("------------- Images downloaded -------------\n")
@@ -124,7 +121,5 @@ if __name__ == '__main__':
     # Example: create an instance of ImageGetter, reading in 'links.txt' as source file
     images = ImageGetter(source_file_name='test_links.txt')
 
-    # Filter links that are broken or invalid
-    images.filter_links()
     # Download images, using the valid URLs
     images.get_images()
