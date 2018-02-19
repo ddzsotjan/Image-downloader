@@ -56,11 +56,11 @@ class ImageGetter:
     def get_one_image(self, link, image_index):
         """Method for downloading an image belonging to a single URL.
         It checks if the URL is in a valid format and if it contains unsafe characters. If there is a problem,
-        it returns "invalid URL".
+        it returns "invalidURL".
         If the URL is all right, it checks if the URL is reachable. If not reachable, it returns 'URLError'.
         Else, it checks whether the content of the URL is an image. If it's an image, it downloads it, and returns
         the file name under which it has been saved on the hard disk.
-        if it isn't an image, then it returns 'noimage'.
+        if it isn't an image, then it returns 'noImage'.
 
         Arguments:
             link (str) -- the URL we want to download.
