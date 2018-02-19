@@ -37,6 +37,7 @@ class ImageGetter:
         if not self.test_mode:
             log_file_name = kwargs.get('log_file_name', 'image_getter.log')
             log_level = kwargs.get('log_level', logging.DEBUG)
+
             logging.basicConfig(filename=log_file_name, level=log_level)
 
     def construct_raw_list(self, file_name):
@@ -56,9 +57,12 @@ class ImageGetter:
         """Method for downloading an image belonging to a single URL.
         It checks if the URL is in a valid format and if it contains unsafe characters. If the string value does not
         fit that of a valid URL, it raises a ValueError.
+
         If the URL format is all right, it checks if the URL is reachable. If not reachable, it raises a
         urllib.request.URLError.
+
         If the content type of the URL is not an image, a TypeError is raised.
+
         Otherwise, it downloads the image at the URL location.
 
         Arguments:
@@ -90,17 +94,17 @@ class ImageGetter:
         """
 
         image_index = 0
-        line_index = 0
+        line_index = 1
         for link in self.raw_list:
 
             try:
                 self.get_one_image(link, image_index)
             except ValueError:
-                logging.warning("Line {}: broken or unsafe URL format.".format(line_index + 1))
+                logging.warning("Line {}: broken or unsafe URL format.".format(line_index))
             except urllib.request.URLError:
-                logging.warning("Line {}: {} -- URL error.".format(line_index + 1, link))
+                logging.warning("Line {}: {} -- URL error.".format(line_index, link))
             except TypeError:
-                logging.warning("Line {}: {} does not point to an image.".format(line_index + 1, link))
+                logging.warning("Line {}: {} --  does not point to an image.".format(line_index, link))
             else:
                 image_index += 1
 
