@@ -69,7 +69,7 @@ class ImageGetter:
         match = re.match(self.matching_string, link)
 
         if not match:
-            return "invalid URL"
+            return "invalidURL"
         else:
 
             try:
@@ -86,7 +86,7 @@ class ImageGetter:
 
                     return image[0]
                 else:
-                    return "noimage"
+                    return "noImage"
 
     def get_images(self):
         """Method for looping through raw_list and downloading the images its items point to, using download_link().
@@ -101,19 +101,18 @@ class ImageGetter:
 
             download_feedback = self.get_one_image(link, image_index)
 
-            if download_feedback == 'invalid URL' and not self.test_mode:
+            if download_feedback == 'invalidURL':
                 logging.warning("Line {} in source file broken or not a valid URL format.".format(line_index + 1))
-            elif download_feedback == 'URLError' and not self.test_mode:
+            elif download_feedback == 'URLError':
                 logging.warning("{} - URL error.".format(link))
-            elif download_feedback == 'noimage' and not self.test_mode:
+            elif download_feedback == 'noImage':
                 logging.warning(link + " does not point to an image.")
             else:
                 image_index += 1
 
             line_index += 1
 
-        if not self.test_mode:
-            logging.info("------------- Images downloaded -------------\n")
+        logging.info("------------- Images downloaded -------------\n")
 
 
 if __name__ == '__main__':
