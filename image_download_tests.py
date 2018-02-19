@@ -1,5 +1,6 @@
 import unittest
 import image_download
+import urllib
 
 
 class ImageGetterTests(unittest.TestCase):
@@ -32,20 +33,20 @@ class ImageGetterTests(unittest.TestCase):
     def test_get_one_image(self):
 
         # Broken/unsafe URL:
-        download_feedback0 = self.images.get_one_image('http://mywebserver.%^{~/images/271947.com', 1)
-        self.assertEqual(download_feedback0, 'invalidURL')
+        with self.assertRaises(ValueError):
+            self.images.get_one_image('http://mywebserver.%^{~/images/271947.com', 1)
 
         # Unreachable URL:
-        download_feedback1 = self.images.get_one_image('http://somewebsrv.com/img/992147.jpg', 1)
-        self.assertEqual(download_feedback1, 'URLError')
+        with self.assertRaises(urllib.request.URLError):
+            self.images.get_one_image('http://somewebsrv.com/img/992147.jpg', 1)
 
-        # Reachable URL but doesn't point to image
-        download_feedback2 = self.images.get_one_image('https://www.blue-yonder.com/de', 1)
-        self.assertEqual(download_feedback2, 'noImage')
+        # Reachable URL but the content type is not an image
+        with self.assertRaises(TypeError):
+            self.images.get_one_image('https://www.blue-yonder.com/de', 1)
 
         # Image successfully downloaded
-        download_feedback3 = self.images.get_one_image('https://www.blue-yonder.com/sites/default/files/styles/mood_full/public/rgc04_home_page_1.png?itok=MFcd1qVa', 1)
-        self.assertEqual(download_feedback3, 'image_1.png')
+        download_feedback = self.images.get_one_image('https://www.blue-yonder.com/sites/default/files/styles/mood_full/public/rgc04_home_page_1.png?itok=MFcd1qVa', 1)
+        self.assertEqual(download_feedback, 'image_1.png')
 
     # Note: get_images() uses get_one_image() in a loop, so if the latter works fine, the former does too.
 

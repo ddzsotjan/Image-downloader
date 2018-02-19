@@ -55,12 +55,15 @@ class ImageGetter:
 
     def get_one_image(self, link, image_index):
         """Method for downloading an image belonging to a single URL.
-        It checks if the URL is in a valid format and if it contains unsafe characters. If there is a problem,
-        it returns "invalidURL".
-        If the URL is all right, it checks if the URL is reachable. If not reachable, it returns 'URLError'.
-        Else, it checks whether the content of the URL is an image. If it's an image, it downloads it, and returns
-        the file name under which it has been saved on the hard disk.
-        if it isn't an image, then it returns 'noImage'.
+        It checks if the URL is in a valid format and if it contains unsafe characters. If the string value does not
+        fit that of a valid URL, it raises a ValueError.
+
+        If the URL format is all right, it checks if the URL is reachable. If not reachable, it raises a
+        urllib.request.URLError.
+
+        If the content type of the URL is not an image, a TypeError is raised.
+
+        Otherwise, it downloads the image at the URL location.
 
         Arguments:
             link (str) -- the URL we want to download.
@@ -69,43 +72,38 @@ class ImageGetter:
         match = re.match(self.matching_string, link)
 
         if not match:
-            return "invalidURL"
+            raise ValueError  # The URL string does not match the expected value
+
+        content = urllib.request.urlopen(link)
+        content_type = content.info().get_content_type()
+
+        if 'image' not in content_type:
+            raise TypeError  # The type of the content the URL points to is not an image
 
         else:
-            try:
-                content = urllib.request.urlopen(link)
-            except urllib.request.URLError:
-                return 'URLError'
-            else:
-                content_type = content.info().get_content_type()
-                if 'image' in content_type:
-                    image_extension = re.search(r"(\w+)$", content_type).group()
+            image_extension = re.search(r"(\w+)$", content_type).group()
+            image = urllib.request.urlretrieve(link, 'image_' + str(image_index) + '.' + image_extension)
 
-                    image = urllib.request.urlretrieve(link, 'image_' + str(image_index) + '.' + image_extension)
-
-                    return image[0]
-
-                else:
-                    return "noImage"
+            return image[0]
 
     def get_images(self):
         """Method for looping through raw_list and downloading the images its items point to, using download_link().
-        For each item, it checks the returned value of get_one_image(), and logs it into the log file if there was a
-         problem with the URL (pointing out the line in the original source file) as well as if the download
-        was unsuccessful.
+        For each item, it tries to call get_one_image(), and (depending on the exception raised) logs it into the
+         log file if there was a problem with the URL (pointing out the line in the original source file), if the URL
+          was unreachable, or if the content type of the URL was not an image.
         """
 
         image_index = 0
         line_index = 0
         for link in self.raw_list:
 
-            download_feedback = self.get_one_image(link, image_index)
-
-            if download_feedback == 'invalidURL':
+            try:
+                self.get_one_image(link, image_index)
+            except ValueError:
                 logging.warning("Line {} in source file broken or not a valid URL format.".format(line_index + 1))
-            elif download_feedback == 'URLError':
+            except urllib.request.URLError:
                 logging.warning("{} - URL error.".format(link))
-            elif download_feedback == 'noImage':
+            except TypeError:
                 logging.warning(link + " does not point to an image.")
             else:
                 image_index += 1
