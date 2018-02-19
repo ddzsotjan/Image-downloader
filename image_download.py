@@ -70,13 +70,12 @@ class ImageGetter:
 
         if not match:
             return "invalidURL"
-        
+
         else:
             try:
                 content = urllib.request.urlopen(link)
             except urllib.request.URLError:
                 return 'URLError'
-            
             else:
                 content_type = content.info().get_content_type()
                 if 'image' in content_type:
@@ -85,7 +84,7 @@ class ImageGetter:
                     image = urllib.request.urlretrieve(link, 'image_' + str(image_index) + '.' + image_extension)
 
                     return image[0]
-                
+
                 else:
                     return "noImage"
 
@@ -121,5 +120,5 @@ if __name__ == '__main__':
     # Example: create an instance of ImageGetter, reading in 'links.txt' as source file
     images = ImageGetter(source_file_name='test_links.txt')
 
-    # Download images
+    # Download images, using the valid URLs
     images.get_images()
