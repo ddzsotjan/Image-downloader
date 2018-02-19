@@ -57,12 +57,9 @@ class ImageGetter:
         """Method for downloading an image belonging to a single URL.
         It checks if the URL is in a valid format and if it contains unsafe characters. If the string value does not
         fit that of a valid URL, it raises a ValueError.
-
         If the URL format is all right, it checks if the URL is reachable. If not reachable, it raises a
         urllib.request.URLError.
-
         If the content type of the URL is not an image, a TypeError is raised.
-
         Otherwise, it downloads the image at the URL location.
 
         Arguments:
