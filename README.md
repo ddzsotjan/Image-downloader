@@ -5,6 +5,5 @@ A unit test script (**image_download_tests.py**) tests the methods and functiona
 
 Instructions for using **image_download.py**:
   - create an ImageGetter() instance specifying the source text file
-  - call the .filter_links() method to filter out the invalid links from the original ensemble
   - call the .get_images() method to download the images the URLs point at
   - You're done! :)
