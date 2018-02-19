@@ -110,7 +110,7 @@ class ImageGetter:
 
             line_index += 1
 
-        logging.info("------------- Images downloaded -------------\n")
+        logging.info("------------- Download finished -------------\n")
 
 
 if __name__ == '__main__':
