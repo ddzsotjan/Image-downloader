@@ -120,5 +120,5 @@ if __name__ == '__main__':
     # Example: create an instance of ImageGetter, reading in 'links.txt' as source file
     images = ImageGetter(source_file_name='test_links.txt')
 
-    # Download images, using the valid URLs
+    # Download images
     images.get_images()
