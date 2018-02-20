@@ -20,8 +20,7 @@ class ImageGetterTests(unittest.TestCase):
         for item in self.images.raw_list:
             self.assertIsInstance(item, str)
 
-        # The expected raw_list after reading in test_links.txt. The first 2 items are invalid: two URLS in 1 line,
-            # and a URL containing unsafe characters
+        # The expected raw_list after reading in test_links.txt.
         expected_raw_list = ['http://mywebserver.com/  http://mages/271947.jpg',
                              'http://mywebserver.%^{~/images/271947.com', 'http://somewebsrv.com/img/992147.jpg',
                              'https://www.blue-yonder.com/de',
